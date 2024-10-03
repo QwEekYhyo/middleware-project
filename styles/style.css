@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+}
+
+#title {
+    position: fixed;
+    bottom: 10px;
+    left: 20px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#map-view {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-image: url("../assets/map.png");
+    background-size: cover;
+}
