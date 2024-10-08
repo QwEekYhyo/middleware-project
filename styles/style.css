@@ -15,6 +15,28 @@ main {
     font-weight: bold;
 }
 
+#pos-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: white;
+    border-radius: 5px !important;
+    height: 30px;
+    width:  30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#pos-button > img {
+    height: 80%;
+    aspect-ratio: 1;
+}
+
+#pos-button:hover {
+    cursor: pointer;
+}
+
 #map-view {
     width: 100vw;
     height: 100vh;
