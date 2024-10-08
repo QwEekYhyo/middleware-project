@@ -7,8 +7,8 @@
 
 .address-input {
     background-color: white;
-    height: 100px;
     padding: 10px;
+    padding-bottom: 30px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -34,4 +34,18 @@
     color: #c5c5c5;
     margin-left: 30px;
     user-select: none;
+}
+
+.fake-input > #real-input {
+    color: black;
+    font-weight: bold;
+}
+
+#fake-autocomplete {
+    border-top: 2px solid #f2f4f7;
+}
+
+#fake-autocomplete > div {
+    margin-top: 15px;
+    padding-left: 80px;
 }
