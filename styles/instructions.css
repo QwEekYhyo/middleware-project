@@ -10,8 +10,6 @@
 #instructions {
     background-color: white;
     height: 100%;
-    border-radius: 15px;
-    box-shadow: 3px 3px 10px #c7c7c7, -3px -3px 10px #c7c7c7;
     padding: 10px;
     display: flex;
     flex-direction: column;

@@ -7,11 +7,12 @@
         <link href="styles/address-input-style.css" rel="stylesheet" />
         <link href="styles/popup.css" rel="stylesheet" />
         <link href="styles/instructions.css" rel="stylesheet" />
+        <link href="styles/boxes.css" rel="stylesheet" />
     </head>
     <body>
         <main>
             <div id="addresses-container">
-                <div class="address-input">
+                <div class="address-input custom-box">
                     <div class="title">Départ</div>
                     <div class="fake-input">
                         <div class="input-text">
@@ -19,7 +20,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="address-input">
+                <div class="address-input custom-box">
                     <div class="title">Arrivée</div>
                     <div class="fake-input">
                         <div class="input-text">
@@ -28,7 +29,7 @@
                     </div>
                 </div>
             </div>
-            <div id="popup">
+            <div id="popup" class="custom-box">
                 <div class="timer">13s</div>
                 <div class="title">Message exceptionnel</div>
                 <div>
@@ -38,7 +39,7 @@
                 </div>
             </div>
             <div id="instructions-container">
-                <div id="instructions">
+                <div id="instructions" class="custom-box">
                     <div class="part">
                         <button id="buttonMute">
                             <img src="assets/mute.png" alt="logo">
