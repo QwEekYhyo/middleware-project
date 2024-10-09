@@ -47,3 +47,10 @@ main {
     background-image: url("../assets/mapp.png");
     background-size: cover;
 }
+
+#clicked-position {
+    height: 30px;
+    aspect-ratio: 1;
+    position: absolute;
+    visibility: hidden;
+}
