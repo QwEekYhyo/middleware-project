@@ -1,7 +1,6 @@
 const image = document.getElementById("clicked-position");
 
 const clickHandler = (event) => {
-    console.log("x: %d, y: %d", event.clientX, event.clientY);
     const clickedElement = event.target;
     if (clickedElement.id === "map-view" || clickedElement.tagName === "MAIN") {
         image.style.visibility = "visible";
