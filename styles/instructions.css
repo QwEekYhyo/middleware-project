@@ -1,43 +1,47 @@
 #instructions-container {
-    margin: 50px 20px 0 auto;
-    height: 70%;
+    margin: 50px 0 0 auto;
+    height: 180px;
     width: 70%;
     display: flex;
-    flex-direction: column;
     gap: 30px;
 }
 
 #instructions {
     background-color: white;
     height: 100%;
+    width: 80%;
     padding: 10px;
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
+    justify-content: center;
     gap: 10px;
 }
 
 #instructions > div {
     flex: 1;
     text-align: center;
+    align-items: center;
 }
 
-.part{
-    border-bottom: black 1px solid;
+#muteContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #buttonMute{
-    display: flex;
     border: none;
     background: none;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
 }
 
 #buttonMute>img {
     width: 20px;
     height: 20px;
+}
+
+
+.part{
+    border-bottom: black 1px solid;
 }
 
 #imgInstr{
@@ -53,9 +57,6 @@
 
 #finish {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
     gap: 10px;
-    padding: 10px;
+    justify-content: center;
 }
