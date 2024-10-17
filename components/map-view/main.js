@@ -4,6 +4,10 @@ class MapView extends HTMLElement{
     }
 
     connectedCallback() {
+        this.style.position = 'absolute';
+        this.style.width = '100vw';
+        this.style.height = '100vh';
+        this.style.zIndex = '-1';
         this.render();
         this.initializeMap();
     }
