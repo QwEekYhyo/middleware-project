@@ -5,17 +5,21 @@
         <title>Maps à la Fouassier</title>
         <link href="style.css" rel="stylesheet" />
         <script src="components/components.js" type="module" defer></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+              integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+              crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+                integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+                crossorigin=""></script>
     </head>
     <body>
-        <main>
-            <custom-widget height="150px" width="100%">
-                <div>SALUT</div>
-            </custom-widget>
-        </main>
-        <div id="title">Maps à la Fouassier</div>
-        <div id="pos-button" class="custom-box">
-            <img src="mock-up/assets/current-location-icon.png" alt="current location icon">
-        </div>
-        <div id="map-view"></div>
+
+    <main>
+        <custom-widget height="150px" width="100%">
+            <div>SALUT</div>
+        </custom-widget>
+    </main>
+    <map-view></map-view>
+    <div id="title">Maps à la Fouassier</div>
     </body>
 </html>
