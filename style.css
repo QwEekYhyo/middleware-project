@@ -39,3 +39,16 @@ main {
 #pos-button:hover {
     cursor: pointer;
 }
+
+#pop-up-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#pop-up-content > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
