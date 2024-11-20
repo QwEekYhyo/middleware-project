@@ -21,7 +21,7 @@ class CancelButton extends HTMLElement {
 
         this.shadowRoot.querySelector('button').addEventListener('click', () => {
             if (this.parentElement) {
-                this.parentElement.parentElement.style.display = 'none';
+                this.parentElement.style.display = 'none';
             }
         });
     }

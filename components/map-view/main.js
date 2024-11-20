@@ -45,6 +45,18 @@ class MapView extends HTMLElement{
             marker2.setLatLng(e.latlng);
         }
         map.on('click', onMapClick);
+
+        // Define itinerary points
+        const itinerary = [
+            [51.505, -0.09], // Point 1
+            [51.51, -0.1],   // Point 2
+            [51.515, -0.12]  // Point 3
+        ];
+
+        // Draw the route
+        const polyline = L.polyline(itinerary, { color: 'blue', weight: 4 }).addTo(map);
+
+        //map.fitBounds(polyline.getBounds());
     }
 
 

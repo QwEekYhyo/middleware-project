@@ -20,7 +20,7 @@ class TimerComponent extends HTMLElement {
         this.interval = setInterval(() => {
             if (this.timeLeft <= 0) {
                 clearInterval(this.interval);
-                this.parentElement.parentElement.style.display = 'none';
+                this.parentElement.style.display = 'none';
             } else {
                 this.timeLeft -= 1;
                 this.shadowRoot.getElementById('timer').textContent = this.timeLeft;
