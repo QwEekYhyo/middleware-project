@@ -11,9 +11,8 @@ class CustomWidget extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue !== newValue) {
+        if (oldValue !== newValue)
             this.render();
-        }
     }
 
     render() {
