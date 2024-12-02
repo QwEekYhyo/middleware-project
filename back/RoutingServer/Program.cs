@@ -51,27 +51,28 @@ namespace ServerHTTPListener {
                 
                 // get url 
                 Console.WriteLine($"Received request for {request.Url}");
+                
+                // Obtain a response object.
+                HttpListenerResponse response = context.Response;
 
-                //get url protocol
-                Console.WriteLine(request.Url.Scheme);
-                //get user in url
-                Console.WriteLine(request.Url.UserInfo);
-                //get host in url
-                Console.WriteLine(request.Url.Host);
-                //get port in url
-                Console.WriteLine(request.Url.Port);
-                //get path in url 
+                if (request.Url == null) {
+                    HTTPUtils.SendError(response, "no URI provided", 400);
+                    continue;
+                } else if (request.Url.LocalPath != "/api/itineraries") {
+                    HTTPUtils.SendError(response, "endpoint does not exists", 404);
+                    continue;
+                }
+
+                // get path in url
                 Console.WriteLine(request.Url.LocalPath);
 
                 //get params un url. After ? and between &
                 NameValueCollection thing = HttpUtility.ParseQueryString(request.Url.Query);
 
-                string responseString = "{'coucou': 'les amis'}";
+                string responseString = "{\"coucou\":\"les amis\"}";
 
                 Console.WriteLine(documentContents);
 
-                // Obtain a response object.
-                HttpListenerResponse response = context.Response;
 
                 // Construct a response.
                 
