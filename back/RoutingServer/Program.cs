@@ -5,7 +5,9 @@ using System.Collections.Specialized;
 
 namespace ServerHTTPListener {
     internal class Program {
-        private static void Main(string[] args) {
+        private static readonly HttpClient CLIENT = new HttpClient();
+
+        private static async Task Main(string[] args) {
             // if HttpListener is not supported by the Framework
             if (!HttpListener.IsSupported) {
                 Console.WriteLine("A more recent Windows version is required to use the HttpListener class.");
@@ -36,6 +38,7 @@ namespace ServerHTTPListener {
                 Environment.Exit(0);
             };
 
+            Program.CLIENT.DefaultRequestHeaders.UserAgent.ParseAdd("LetzGoBiking/1.0");
 
             while (true) {
                 // Note: The GetContext method blocks while waiting for a request.
@@ -72,12 +75,11 @@ namespace ServerHTTPListener {
                     continue;
                 }
 
+                var addressDetails = await OSMUtils.GetAddressDetails(Program.CLIENT, origin);
+                foreach (var test in addressDetails)
+                    Console.WriteLine(test);
+
                 string responseString = "{\"coucou\":\"les amis\"}";
-
-                Console.WriteLine(documentContents);
-
-
-                // Construct a response.
                 
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                 // Get a response stream and write the response to it.
