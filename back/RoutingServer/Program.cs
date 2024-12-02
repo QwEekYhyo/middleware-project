@@ -49,25 +49,28 @@ namespace ServerHTTPListener {
                     }
                 }
                 
-                // get url 
-                Console.WriteLine($"Received request for {request.Url}");
-                
-                // Obtain a response object.
                 HttpListenerResponse response = context.Response;
 
                 if (request.Url == null) {
                     HTTPUtils.SendError(response, "no URI provided", 400);
                     continue;
-                } else if (request.Url.LocalPath != "/api/itineraries") {
+                } else if (request.Url.LocalPath != "/api/itineraries") { // there is only one endpoint
                     HTTPUtils.SendError(response, "endpoint does not exists", 404);
                     continue;
                 }
 
-                // get path in url
-                Console.WriteLine(request.Url.LocalPath);
-
                 //get params un url. After ? and between &
-                NameValueCollection thing = HttpUtility.ParseQueryString(request.Url.Query);
+                NameValueCollection queryParams = HttpUtility.ParseQueryString(request.Url.Query);
+                string? origin = queryParams["origin"];
+                string? destination = queryParams["destination"];
+                if (origin == null || destination == null) {
+                    string errorMessage = String.Format(
+                            "missing required parameter '{0}'",
+                            origin == null ? "origin" : "destination"
+                    );
+                    HTTPUtils.SendError(response, errorMessage, 422);
+                    continue;
+                }
 
                 string responseString = "{\"coucou\":\"les amis\"}";
 
