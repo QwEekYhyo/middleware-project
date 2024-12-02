@@ -19,6 +19,7 @@ namespace OSMObjects {
         public string? lat { get; set; }
         public string? lon { get; set; }
         public string? display_name { get; set; }
+        public AddressDetails? address { get; set; }
     }
 
     public class AddressDetails : JSONObject {
