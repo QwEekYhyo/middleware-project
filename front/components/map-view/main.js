@@ -1,6 +1,8 @@
-class MapView extends HTMLElement{
+class MapView extends HTMLElement {
     constructor() {
         super();
+        this.map = null;
+        this.routeLayer = null;
     }
 
     connectedCallback() {
@@ -16,27 +18,25 @@ class MapView extends HTMLElement{
         const mapDiv = document.createElement('div');
         mapDiv.id = 'map';
         mapDiv.style.height = '100vh';
-
         this.appendChild(mapDiv);
     }
 
     initializeMap() {
-        var map = L.map('map').setView([51.505, -0.09], 13);
+        this.map = L.map('map').setView([51.505, -0.09], 13);
 
-        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+        }).addTo(this.map);
 
-        map.touchZoom.disable();
-        map.doubleClickZoom.disable();
-        //map.scrollWheelZoom.disable();
-        map.boxZoom.disable();
-        map.keyboard.disable();
-        map.zoomControl.remove();
+        this.map.touchZoom.disable();
+        this.map.doubleClickZoom.disable();
+        this.map.boxZoom.disable();
+        this.map.keyboard.disable();
+        this.map.zoomControl.remove();
 
-        var marker = L.marker([51.5, -0.09]).addTo(map);
-        var marker2 = L.marker([51.0, -0.09]).addTo(map);
+        var marker = L.marker([51.5, -0.09]).addTo(this.map);
+        var marker2 = L.marker([51.0, -0.09]).addTo(this.map);
 
         marker.bindPopup("<b>Vous etes ici</b>").openPopup();
 
@@ -44,24 +44,26 @@ class MapView extends HTMLElement{
             console.log("You clicked the map at " + e.latlng);
             marker2.setLatLng(e.latlng);
         }
-        map.on('click', onMapClick);
-
-        // Define itinerary points
-        const itinerary = [
-            [51.505, -0.09], // Point 1
-            [51.51, -0.1],   // Point 2
-            [51.515, -0.12]  // Point 3
-        ];
-
-        // Draw the route
-        const polyline = L.polyline(itinerary, { color: 'blue', weight: 4 }).addTo(map);
-
-        //map.fitBounds(polyline.getBounds());
+        this.map.on('click', onMapClick);
     }
 
+    displayItinerary(geometry, options = { color: 'blue', weight: 4 }) {
+        if (!this.map) {
+            console.error("Map is not initialized.");
+            return;
+        }
 
+        const coordinates = polyline.decode(geometry);
+        const latLngs = coordinates.map(coord => [coord[0], coord[1]]);
 
+        if (this.routeLayer) {
+            this.map.removeLayer(this.routeLayer);
+        }
 
+        this.routeLayer = L.polyline(latLngs, options).addTo(this.map);
+
+        this.map.fitBounds(this.routeLayer.getBounds());
+    }
 }
 
 customElements.define("map-view", MapView);
