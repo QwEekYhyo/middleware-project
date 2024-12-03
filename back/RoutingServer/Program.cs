@@ -48,73 +48,75 @@ namespace ServerHTTPListener {
                 HttpListenerContext context = listener.GetContext();
                 HttpListenerRequest request = context.Request;
 
-                string documentContents;
-                using (Stream receiveStream = request.InputStream) {
-                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8)) {
-                        documentContents = readStream.ReadToEnd();
+                _ = Task.Run(async () => {
+                    string documentContents;
+                    using (Stream receiveStream = request.InputStream) {
+                        using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8)) {
+                            documentContents = readStream.ReadToEnd();
+                        }
                     }
-                }
-                
-                HttpListenerResponse response = context.Response;
+                    
+                    HttpListenerResponse response = context.Response;
 
-                if (request.Url == null) {
-                    HTTPUtils.SendError(response, "no URI provided", 400);
-                    continue;
-                } else if (request.Url.LocalPath != "/api/itineraries") { // there is only one endpoint
-                    HTTPUtils.SendError(response, "endpoint does not exists", 404);
-                    continue;
-                }
+                    if (request.Url == null) {
+                        HTTPUtils.SendError(response, "no URI provided", 400);
+                        return;
+                    } else if (request.Url.LocalPath != "/api/itineraries") { // there is only one endpoint
+                        HTTPUtils.SendError(response, "endpoint does not exists", 404);
+                        return;
+                    }
 
-                //get params un url. After ? and between &
-                NameValueCollection queryParams = HttpUtility.ParseQueryString(request.Url.Query);
-                string? origin = queryParams["origin"];
-                string? destination = queryParams["destination"];
-                if (origin == null || destination == null) {
-                    string errorMessage = String.Format(
-                            "missing required parameter '{0}'",
-                            origin == null ? "origin" : "destination"
-                    );
-                    HTTPUtils.SendError(response, errorMessage, 422);
-                    continue;
-                }
+                    //get params un url. After ? and between &
+                    NameValueCollection queryParams = HttpUtility.ParseQueryString(request.Url.Query);
+                    string? origin = queryParams["origin"];
+                    string? destination = queryParams["destination"];
+                    if (origin == null || destination == null) {
+                        string errorMessage = String.Format(
+                                "missing required parameter '{0}'",
+                                origin == null ? "origin" : "destination"
+                        );
+                        HTTPUtils.SendError(response, errorMessage, 422);
+                        return;
+                    }
 
-                // TODO: cache these results somehow
-                OSMObjects.AddressContainer[] originDetails = await OSMUtils.GetAddressDetails(Program.CLIENT, origin);
-                OSMObjects.AddressContainer[] destinationDetails = await OSMUtils.GetAddressDetails(Program.CLIENT, destination);
+                    // TODO: cache these results somehow
+                    OSMObjects.AddressContainer[] originDetails = await OSMUtils.GetAddressDetails(Program.CLIENT, origin);
+                    OSMObjects.AddressContainer[] destinationDetails = await OSMUtils.GetAddressDetails(Program.CLIENT, destination);
 
-                if (originDetails.Length == 0) {
-                    HTTPUtils.SendError(response, "origin address not found", 404);
-                    continue;
-                }
-                if (destinationDetails.Length == 0) {
-                    HTTPUtils.SendError(response, "destination address not found", 404);
-                    continue;
-                }
+                    if (originDetails.Length == 0) {
+                        HTTPUtils.SendError(response, "origin address not found", 404);
+                        return;
+                    }
+                    if (destinationDetails.Length == 0) {
+                        HTTPUtils.SendError(response, "destination address not found", 404);
+                        return;
+                    }
 
-                JCDecauxObjects.Contract? contract = JCDecauxUtils.GetContractForCity(originDetails[0].address!.city, jcdecauxContracts);
+                    JCDecauxObjects.Contract? contract = JCDecauxUtils.GetContractForCity(originDetails[0].address!.city, jcdecauxContracts);
 
-                if (contract == null) {
-                    HTTPUtils.SendError(response, "no contract found for origin input", 404);
-                    continue;
-                }
-                // TODO: handle origin and destination not in same contract
-                if (!contract.Equals(JCDecauxUtils.GetContractForCity(destinationDetails[0].address!.city, jcdecauxContracts))) {
-                    HTTPUtils.SendError(response, "origin and destination are not in the same contract", 418);
-                    continue;
-                }
-                JCDecauxObjects.Station[] stations = await JCDecauxUtils.GetContractStations(CLIENT, contract);
-                foreach (var station in stations)
-                    Console.WriteLine(station);
+                    if (contract == null) {
+                        HTTPUtils.SendError(response, "no contract found for origin input", 404);
+                        return;
+                    }
+                    // TODO: handle origin and destination not in same contract
+                    if (!contract.Equals(JCDecauxUtils.GetContractForCity(destinationDetails[0].address!.city, jcdecauxContracts))) {
+                        HTTPUtils.SendError(response, "origin and destination are not in the same contract", 418);
+                        return;
+                    }
+                    JCDecauxObjects.Station[] stations = await JCDecauxUtils.GetContractStations(CLIENT, contract);
+                    foreach (var station in stations)
+                        Console.WriteLine(station);
 
-                string responseString = "{\"coucou\":\"les amis\"}";
-                
-                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-                // Get a response stream and write the response to it.
-                response.ContentLength64 = buffer.Length;
-                System.IO.Stream output = response.OutputStream;
-                output.Write(buffer, 0, buffer.Length);
-                // You must close the output stream.
-                output.Close();
+                    string responseString = "{\"coucou\":\"les amis\"}";
+                    
+                    byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+                    // Get a response stream and write the response to it.
+                    response.ContentLength64 = buffer.Length;
+                    System.IO.Stream output = response.OutputStream;
+                    output.Write(buffer, 0, buffer.Length);
+                    // You must close the output stream.
+                    output.Close();
+                });
             }
             // Httplistener never stop ... But Ctrl-C do that ...
             // listener.Stop();
