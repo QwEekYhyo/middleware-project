@@ -9,7 +9,7 @@ class PopUpContent extends HTMLElement {
         this.addEventListeners();
     }
 
-    render(message = "Welcome to Maps à la Fouassier!") {
+    render(message = "Bienvenue sur Maps à la Fouassier !") {
         this.shadowRoot.innerHTML = `
             <style>
                 #pop-up-content {

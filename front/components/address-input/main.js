@@ -11,7 +11,7 @@ class AddressInput extends HTMLElement {
         title.innerText = this.getAttribute("address-title") || "title";
 
         this.input = document.createElement("input");
-        this.input.setAttribute("placeholder", "Search");
+        this.input.setAttribute("placeholder", this.getAttribute("input-placeholder") || "Search");
 
         shadow.appendChild(title);
         shadow.appendChild(this.input);

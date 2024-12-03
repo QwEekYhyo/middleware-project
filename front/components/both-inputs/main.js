@@ -21,12 +21,12 @@ class BothInputs extends HTMLElement {
 
         let widget = BothInputs.createWidget();
         container.appendChild(widget);
-        this.originInput = BothInputs.createInput("Départ");
+        this.originInput = BothInputs.createInput("Départ", "Entrez une adresse de départ");
         widget.appendChild(this.originInput);
 
         widget = BothInputs.createWidget();
         container.appendChild(widget);
-        this.destinationInput = BothInputs.createInput("Arrivée");
+        this.destinationInput = BothInputs.createInput("Arrivée", "Entrez une adresse d'arrivée");
         widget.appendChild(this.destinationInput);
 
         this.originInput.addEventListener("keyup", this.onKeyUp.bind(this));
@@ -78,9 +78,10 @@ class BothInputs extends HTMLElement {
         }
     }
 
-    static createInput(title) {
+    static createInput(title, placeholder) {
         const input = document.createElement("address-input");
         input.setAttribute("address-title", title);
+        input.setAttribute("input-placeholder", placeholder);
         return input;
     }
 }
