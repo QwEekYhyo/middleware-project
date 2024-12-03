@@ -80,6 +80,19 @@ namespace JCDecauxObjects {
         public string? status { get; set; }
         public int? available_bikes { get; set; }
         public Position? position { get; set; }
+
+        public override bool Equals(object? obj) {
+            if (obj is not Station other)
+                return false;
+
+            return string.Equals(name, other.name) &&
+                   string.Equals(contract_name, other.contract_name) &&
+                   number == other.number;
+        }
+
+        public override int GetHashCode() {
+            return HashCode.Combine(name, contract_name, number);
+        }
     }
 
     public class Position : JSONObject {

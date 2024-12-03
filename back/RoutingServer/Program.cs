@@ -106,11 +106,13 @@ namespace ServerHTTPListener {
                         return;
                     }
                     Station[] stations = await JCDecauxUtils.GetContractStations(CLIENT, contract);
-                    Array.Sort<Station>(stations, new DistanceCalculator.DistanceComparer(originDetails[0]));
-                    for (int i = 0; i < 5 && i < stations.Length; i++)
-                        Console.WriteLine(stations[i]);
+                    string? itineraryGeometry = await OSMUtils.ComputeItinerary(CLIENT, originDetails[0], destinationDetails[0], stations);
+                    if (itineraryGeometry == null) {
+                        HTTPUtils.SendError(response, "could not compute itinerary", 418);
+                        return;
+                    }
 
-                    string responseString = "{\"coucou\":\"les amis\"}";
+                    string responseString = $"{{\"geometry\":\"{itineraryGeometry}\"}}";
                     
                     byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                     // Get a response stream and write the response to it.
