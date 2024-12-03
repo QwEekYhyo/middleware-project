@@ -17,15 +17,23 @@ class TimerComponent extends HTMLElement {
     }
 
     startTimer() {
+        clearInterval(this.interval);
         this.interval = setInterval(() => {
             if (this.timeLeft <= 0) {
                 clearInterval(this.interval);
-                this.parentElement.style.display = 'none';
+                this.dispatchEvent(new Event('timer-finished', { bubbles: true, composed: true }));
             } else {
                 this.timeLeft -= 1;
                 this.shadowRoot.getElementById('timer').textContent = this.timeLeft;
             }
         }, 1000);
+    }
+
+    resetTimer(duration = 20) {
+        clearInterval(this.interval);
+        this.timeLeft = duration;
+        this.render();
+        this.startTimer();
     }
 }
 

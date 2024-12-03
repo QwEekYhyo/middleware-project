@@ -1,3 +1,5 @@
+import { triggerPopUp } from "../../main.js";
+
 class BothInputs extends HTMLElement {
     constructor() {
         super();
@@ -43,8 +45,10 @@ class BothInputs extends HTMLElement {
         if (event.key === "Enter") {
             const origin = this.originInput.getInputText();
             const dest = this.destinationInput.getInputText();
-            if (origin === "" || dest === "")
+            if (origin === "" || dest === "") {
+                triggerPopUp("Adresse manquante /!\\", 10);
                 return;
+            }
         
             fetch(
                 `http://localhost:8000/api/itineraries?origin=${origin.replace(/ /g, "+")}&destination=${dest.replace(/ /g, "+")}`
@@ -53,6 +57,7 @@ class BothInputs extends HTMLElement {
                     return response.json().then(errorData => {
                         console.log(errorData);
                         console.error(`HTTP error! Status: ${response.status}, Message: ${errorData.error || 'Unknown error'}`);
+                        triggerPopUp(errorData.error, 20);
                     });
                 }
                 return response.json();

@@ -20,9 +20,7 @@ class CancelButton extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
         this.shadowRoot.querySelector('button').addEventListener('click', () => {
-            if (this.parentElement) {
-                this.parentElement.style.display = 'none';
-            }
+            this.dispatchEvent(new Event('popup-closed', { bubbles: true, composed: true }));
         });
     }
 }

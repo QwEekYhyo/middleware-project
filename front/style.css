@@ -13,6 +13,12 @@ main {
 #message-container {
     display: flex;
     justify-content: center;
+    margin-top: 30px;
+}
+
+#message-container custom-widget {
+    padding-left: 8px;
+    padding-right: 6px;
 }
 
 #right-container {

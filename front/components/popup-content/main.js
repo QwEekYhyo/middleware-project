@@ -6,9 +6,10 @@ class PopUpContent extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        this.addEventListeners();
     }
 
-    render() {
+    render(message = "Welcome to Maps à la Fouassier!") {
         this.shadowRoot.innerHTML = `
             <style>
                 #pop-up-content {
@@ -26,10 +27,31 @@ class PopUpContent extends HTMLElement {
             </style>
             <div id="pop-up-content">
                 <timer-component></timer-component>
-                <p>Message</p>
+                <p>${message}</p>
                 <cancel-button></cancel-button>
             </div>
         `;
+    }
+
+    addEventListeners() {
+        this.shadowRoot.querySelector('timer-component').addEventListener('timer-ended', () => {
+            this.closePopUp();
+        });
+
+        this.shadowRoot.querySelector('cancel-button').addEventListener('popup-closed', () => {
+            this.closePopUp();
+        });
+    }
+
+    closePopUp() {
+        this.dispatchEvent(new Event('popup-closed', { bubbles: true, composed: true }));
+    }
+
+    updateMessage(newMessage) {
+        const messageElement = this.shadowRoot.querySelector('p');
+        if (messageElement) {
+            messageElement.textContent = newMessage;
+        }
     }
 }
 
