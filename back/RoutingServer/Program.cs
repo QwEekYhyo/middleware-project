@@ -75,9 +75,32 @@ namespace ServerHTTPListener {
                     continue;
                 }
 
-                var addressDetails = await OSMUtils.GetAddressDetails(Program.CLIENT, origin);
-                foreach (var test in addressDetails)
-                    Console.WriteLine(test);
+                // TODO: cache these results somehow
+                OSMObjects.AddressContainer[] originDetails = await OSMUtils.GetAddressDetails(Program.CLIENT, origin);
+                OSMObjects.AddressContainer[] destinationDetails = await OSMUtils.GetAddressDetails(Program.CLIENT, destination);
+
+                if (originDetails.Length == 0) {
+                    HTTPUtils.SendError(response, "origin address not found", 404);
+                    continue;
+                }
+                if (destinationDetails.Length == 0) {
+                    HTTPUtils.SendError(response, "destination address not found", 404);
+                    continue;
+                }
+
+                JCDecauxObjects.Contract[] jcdecauxContracts = await JCDecauxUtils.GetContracts(Program.CLIENT);
+                JCDecauxObjects.Contract? contract = JCDecauxUtils.GetContractForCity(originDetails[0].address!.city, jcdecauxContracts);
+
+                if (contract == null) {
+                    HTTPUtils.SendError(response, "no contract found for origin input", 404);
+                    continue;
+                }
+                // TODO: handle origin and destination not in same contract
+                if (!contract.Equals(JCDecauxUtils.GetContractForCity(destinationDetails[0].address!.city, jcdecauxContracts))) {
+                    HTTPUtils.SendError(response, "origin and destination are not in the same contract", 418);
+                    continue;
+                }
+                Console.WriteLine(contract);
 
                 string responseString = "{\"coucou\":\"les amis\"}";
                 
@@ -89,7 +112,7 @@ namespace ServerHTTPListener {
                 // You must close the output stream.
                 output.Close();
             }
-            // Httplistener neither stop ... But Ctrl-C do that ...
+            // Httplistener never stop ... But Ctrl-C do that ...
             // listener.Stop();
         }
     }
