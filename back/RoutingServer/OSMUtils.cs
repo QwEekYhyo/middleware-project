@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Text.Json;
 
@@ -52,8 +53,32 @@ public static class OSMUtils {
             string url = $"{BASE_OSRM_URL}/{originCoord};{originStationCoord};{destinationStationCoord};{destinationCoord}";
             HttpResponseMessage response = await client.GetAsync(url);
             string str = await response.Content.ReadAsStringAsync();
-            return ExtractGeometry(str);
+            return BuildItineraryJson(
+                    ExtractGeometry(str),
+                    originCoord,
+                    originStationCoord,
+                    destinationStationCoord,
+                    destinationCoord
+            );
         }
+    }
+
+    private static string BuildItineraryJson(
+            string? geometry,
+            string originCoord,
+            string originStationCoord,
+            string destinationStationCoord,
+            string destinationCoord
+    ) {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("{");
+        sb.Append($"\"geometry\":\"{geometry}\",");
+        sb.Append($"\"origin\":\"{originCoord}\",");
+        sb.Append($"\"origin_station\":\"{originStationCoord}\",");
+        sb.Append($"\"destination\":\"{destinationCoord}\",");
+        sb.Append($"\"destination_station\":\"{destinationStationCoord}\"");
+        sb.Append("}");
+        return sb.ToString();
     }
 }
 

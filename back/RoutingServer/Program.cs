@@ -119,14 +119,12 @@ namespace ServerHTTPListener {
                         return;
                     }
                     Station[] stations = await JCDecauxUtils.GetContractStations(CLIENT, contract);
-                    string? itineraryGeometry = await OSMUtils.ComputeItinerary(CLIENT, originDetails[0], destinationDetails[0], stations);
-                    if (itineraryGeometry == null) {
+                    string? responseString = await OSMUtils.ComputeItinerary(CLIENT, originDetails[0], destinationDetails[0], stations);
+                    if (responseString == null) {
                         HTTPUtils.SendError(response, "could not compute itinerary", 418);
                         return;
                     }
 
-                    string responseString = $"{{\"geometry\":\"{itineraryGeometry}\"}}";
-                    
                     byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                     // Get a response stream and write the response to it.
                     response.ContentLength64 = buffer.Length;
