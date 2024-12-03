@@ -10,6 +10,12 @@ class AddressInput extends HTMLElement {
 
         shadow.appendChild(title);
         shadow.appendChild(input);
+
+        const style = document.createElement("link");
+        style.setAttribute("rel", "stylesheet");
+        style.setAttribute("href", "components/address-input/style.css");
+
+        shadow.appendChild(style);
     }
 }
 
