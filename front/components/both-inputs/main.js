@@ -24,8 +24,11 @@ class BothInputs extends HTMLElement {
 
         widget = BothInputs.createWidget();
         container.appendChild(widget);
-        this.originInput = BothInputs.createInput("Arrivée");
-        widget.appendChild(this.originInput);
+        this.destinationInput = BothInputs.createInput("Arrivée");
+        widget.appendChild(this.destinationInput);
+
+        this.originInput.addEventListener("keyup", this.onKeyUp.bind(this));
+        this.destinationInput.addEventListener("keyup", this.onKeyUp.bind(this));
     }
 
     static createWidget() {
@@ -33,6 +36,34 @@ class BothInputs extends HTMLElement {
         widget.setAttribute("height", "80px");
         widget.setAttribute("width", "100%");
         return widget;
+    }
+
+    onKeyUp(event) {
+        console.log("hello");
+        if (event.key === "Enter") {
+            const origin = this.originInput.getInputText();
+            const dest = this.destinationInput.getInputText();
+            if (origin === "" || dest === "")
+                return;
+        
+            fetch(
+                `http://localhost:8000/api/itineraries?origin=${origin.replace(/ /g, "+")}&destination=${dest.replace(/ /g, "+")}`
+            ).then(async response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        console.log(errorData);
+                        console.error(`HTTP error! Status: ${response.status}, Message: ${errorData.error || 'Unknown error'}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                const mapView = document.querySelector('map-view');
+                mapView.displayItinerary(data["geometry"]);
+                this.originInput.clearInput();
+                this.destinationInput.clearInput();
+            });
+        }
     }
 
     static createInput(title) {

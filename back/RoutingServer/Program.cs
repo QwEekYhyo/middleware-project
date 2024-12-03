@@ -50,6 +50,16 @@ namespace ServerHTTPListener {
                 HttpListenerContext context = listener.GetContext();
                 HttpListenerRequest request = context.Request;
 
+                if (request.HttpMethod == "OPTIONS") {
+                    HttpListenerResponse preflightResponse = context.Response;
+                    preflightResponse.AddHeader("Access-Control-Allow-Origin", "*");
+                    preflightResponse.AddHeader("Access-Control-Allow-Methods", "GET");
+                    preflightResponse.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+                    preflightResponse.StatusCode = 204;
+                    preflightResponse.Close();
+                    continue;
+                }
+
                 _ = Task.Run(async () => {
                     string documentContents;
                     using (Stream receiveStream = request.InputStream) {
@@ -59,6 +69,9 @@ namespace ServerHTTPListener {
                     }
                     
                     HttpListenerResponse response = context.Response;
+                    response.AddHeader("Access-Control-Allow-Origin", "*");
+                    response.AddHeader("Access-Control-Allow-Methods", "GET");
+                    response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
 
                     if (request.Url == null) {
                         HTTPUtils.SendError(response, "no URI provided", 400);
