@@ -18,6 +18,7 @@ OU ALORS :
 - exécuter la commande `dotnet build -c Release`
 - puis lancer le binaire créé dans `back/RoutingServer/bin/Release/net8.0` (sans oublier de passer un url d'écoute en paramètre)
 
-Pour faire ceci en utilisant Microsoft®TM© Visual Studio, j'imagine que quelques clics gauches et quelques clics droits suffisent.
+Pour faire ceci en utilisant Microsoft™®© Visual™ Studio™, j'imagine que quelques clics gauches et quelques clics droits suffisent 
+(en faisant bien attention à passer l'url d'écoute en paramètre).
   
 ### - **Le front**
