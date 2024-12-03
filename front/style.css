@@ -10,6 +10,17 @@ main {
     grid-template-columns: 1fr 2fr 1fr;
 }
 
+#message-container {
+    display: flex;
+    justify-content: center;
+}
+
+#right-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
 #title {
     position: fixed;
     bottom: 10px;
