@@ -22,3 +22,22 @@ Pour faire ceci en utilisant Microsoft™®© Visual™ Studio™, j'imagine que
 (en faisant bien attention à passer l'url d'écoute en paramètre).
   
 ### - **Le front**
+Le front ne nécessite AUCUN gestionnaire de paquet ni environnement d'exécution JavaScript, donc la seule chose nécessaire pour le lancer est un web serveur quelconque tel que :
+- darkhttpd
+- lighttpd
+- nginx (si vous êtes fou / déploiement)
+- apache (si vous êtes fou / déploiement)
+
+Sans oublier, évidemment, un superbe navigateur WEB pour le visualiser, que dis-je ? L'admirer !
+
+Mes recommandations personnelles :
+- Waterfox
+- Firefox (faites un peu attention à vos données)
+- Chromium (faites très attention à vos données)
+
+A bannir :
+- Chrome
+- Edge
+- Opera
+- OperaGX
+- Internet Explorer
