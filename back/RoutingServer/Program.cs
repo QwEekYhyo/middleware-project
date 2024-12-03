@@ -40,6 +40,9 @@ namespace ServerHTTPListener {
 
             Program.CLIENT.DefaultRequestHeaders.UserAgent.ParseAdd("LetzGoBiking/1.0");
 
+            // TODO: do this in another thread
+            JCDecauxObjects.Contract[] jcdecauxContracts = await JCDecauxUtils.GetContracts(Program.CLIENT);
+
             while (true) {
                 // Note: The GetContext method blocks while waiting for a request.
                 HttpListenerContext context = listener.GetContext();
@@ -88,7 +91,6 @@ namespace ServerHTTPListener {
                     continue;
                 }
 
-                JCDecauxObjects.Contract[] jcdecauxContracts = await JCDecauxUtils.GetContracts(Program.CLIENT);
                 JCDecauxObjects.Contract? contract = JCDecauxUtils.GetContractForCity(originDetails[0].address!.city, jcdecauxContracts);
 
                 if (contract == null) {
@@ -100,7 +102,9 @@ namespace ServerHTTPListener {
                     HTTPUtils.SendError(response, "origin and destination are not in the same contract", 418);
                     continue;
                 }
-                Console.WriteLine(contract);
+                JCDecauxObjects.Station[] stations = await JCDecauxUtils.GetContractStations(CLIENT, contract);
+                foreach (var station in stations)
+                    Console.WriteLine(station);
 
                 string responseString = "{\"coucou\":\"les amis\"}";
                 

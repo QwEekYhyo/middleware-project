@@ -5,10 +5,11 @@ using JCDecauxObjects;
 public static class JCDecauxUtils {
     // TODO: read this key from a file that is NOT on GitHub unlike this source file
     private static readonly string API_KEY = "156041d85480d64a92d2b27901283c6dc79b8952";
+    private static readonly string BASE_URL = "https://api.jcdecaux.com/vls/v2";
 
     public static async Task<Contract[]> GetContracts(HttpClient client) {
         HttpResponseMessage response = await client.GetAsync(
-                "https://api.jcdecaux.com/vls/v1/contracts?apiKey=" + JCDecauxUtils.API_KEY
+                JCDecauxUtils.BASE_URL + "/contracts?apiKey=" + JCDecauxUtils.API_KEY
         );
         string str = await response.Content.ReadAsStringAsync();
         // Deserialize JSON
@@ -41,6 +42,15 @@ public static class JCDecauxUtils {
 
         return null;
     }
+
+    public static async Task<Station[]> GetContractStations(HttpClient client, Contract contract) {
+        HttpResponseMessage response = await client.GetAsync(
+                $"{JCDecauxUtils.BASE_URL}/stations?contract={contract.name}&apiKey={JCDecauxUtils.API_KEY}"
+        );
+        string str = await response.Content.ReadAsStringAsync();
+        Station[]? stations = JsonSerializer.Deserialize<Station[]>(str);
+        return stations ?? Array.Empty<Station>();
+    }
 }
 
 namespace JCDecauxObjects {
@@ -65,7 +75,15 @@ namespace JCDecauxObjects {
     public class Station : JSONObject {
         public int? number { get; set; }
         public string? name { get; set; }
+        public string? contract_name { get; set; }
         public string? address { get; set; }
         public string? status { get; set; }
+        public int? available_bikes { get; set; }
+        public Position? position { get; set; }
+    }
+
+    public class Position : JSONObject {
+        public double? latitude { get; set; }
+        public double? longitude { get; set; }
     }
 }
