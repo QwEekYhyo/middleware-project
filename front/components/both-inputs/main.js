@@ -60,6 +60,13 @@ class BothInputs extends HTMLElement {
             .then(data => {
                 const mapView = document.querySelector('map-view');
                 mapView.displayItinerary(data["geometry"]);
+
+                mapView.placeMarkers(
+                    data["origin"],
+                    data["destination"],
+                    data["origin_station"],
+                    data["destination_station"]
+                );
                 this.originInput.clearInput();
                 this.destinationInput.clearInput();
             });
