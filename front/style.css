@@ -10,14 +10,6 @@ main {
     grid-template-columns: 1fr 2fr 1fr;
 }
 
-#inputs-container {
-    height: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-}
-
 #message-container {
     display: flex;
     justify-content: center;
