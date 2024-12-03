@@ -3,6 +3,8 @@ using System.Text;
 using System.Web;
 using System.Collections.Specialized;
 
+using JCDecauxObjects;
+
 namespace ServerHTTPListener {
     internal class Program {
         private static readonly HttpClient CLIENT = new HttpClient();
@@ -41,7 +43,7 @@ namespace ServerHTTPListener {
             Program.CLIENT.DefaultRequestHeaders.UserAgent.ParseAdd("LetzGoBiking/1.0");
 
             // TODO: do this in another thread
-            JCDecauxObjects.Contract[] jcdecauxContracts = await JCDecauxUtils.GetContracts(Program.CLIENT);
+            Contract[] jcdecauxContracts = await JCDecauxUtils.GetContracts(Program.CLIENT);
 
             while (true) {
                 // Note: The GetContext method blocks while waiting for a request.
@@ -92,7 +94,7 @@ namespace ServerHTTPListener {
                         return;
                     }
 
-                    JCDecauxObjects.Contract? contract = JCDecauxUtils.GetContractForCity(originDetails[0].address!.city, jcdecauxContracts);
+                    Contract? contract = JCDecauxUtils.GetContractForCity(originDetails[0].address!.city, jcdecauxContracts);
 
                     if (contract == null) {
                         HTTPUtils.SendError(response, "no contract found for origin input", 404);
@@ -103,9 +105,10 @@ namespace ServerHTTPListener {
                         HTTPUtils.SendError(response, "origin and destination are not in the same contract", 418);
                         return;
                     }
-                    JCDecauxObjects.Station[] stations = await JCDecauxUtils.GetContractStations(CLIENT, contract);
-                    foreach (var station in stations)
-                        Console.WriteLine(station);
+                    Station[] stations = await JCDecauxUtils.GetContractStations(CLIENT, contract);
+                    Array.Sort<Station>(stations, new DistanceCalculator.DistanceComparer(originDetails[0]));
+                    for (int i = 0; i < 5 && i < stations.Length; i++)
+                        Console.WriteLine(stations[i]);
 
                     string responseString = "{\"coucou\":\"les amis\"}";
                     
